@@ -899,6 +899,7 @@ focusin(XEvent *e)
 		setfocus(selmon->sel);
 }
 
+
 void
 focusmon(const Arg *arg)
 {
@@ -908,9 +909,22 @@ focusmon(const Arg *arg)
 		return;
 	if ((m = dirtomon(arg->i)) == selmon)
 		return;
+
+  /* Bar hiding/showing is done here because of my keybinds with holdbar patch. */
+
+  /* Hide bar on previous mon */
+  selmon->showbar = 0;
+  updatebarpos(selmon);
+  XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
+
 	unfocus(selmon->sel, 0);
 	selmon = m;
 	focus(NULL);
+
+  /* Show bar on new mon */
+  selmon->showbar = 1;
+  updatebarpos(selmon);
+  XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
 }
 
 void
@@ -1367,6 +1381,13 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
 	wc.border_width = c->bw;
+	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
+	    || &monocle == c->mon->lt[c->mon->sellt]->arrange)
+	    && !c->isfullscreen && !c->isfloating) {
+		c->w = wc.width += c->bw * 2;
+		c->h = wc.height += c->bw * 2;
+		wc.border_width = 0;
+	}
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
 	XSync(dpy, False);
