@@ -1,3 +1,4 @@
+#include "XF86keysym.h"
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
@@ -12,13 +13,14 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col_dirty_blue[]  = "#444455";
 static const char col_white[]       = "#ffffff";
 static const char col_gordon[]      = "#b35820";
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1,  col_gray2  },
-	[SchemeSel]  = { col_gray4, col_gordon, col_white  },
+	[SchemeSel]  = { col_gray4, col_dirty_blue, col_white  },
 };
 
 /* tagging */
@@ -65,9 +67,15 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_gordon, "-sf", col_gray4, NULL };
+static const char *screenshotcmd[] = { "gnome-screenshot", "-i" };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
+static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 /* static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-theme", "slate" }; */
 static const char *termcmd[]  = { "alacritty", NULL };
+
+static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
+static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
+static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -98,6 +106,11 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = -10 } },
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = +10 } },
+	{ MODKEY,                       XK_w,      spawn,          {.v = dmenu_nm_cmd } },
+	{ 0,                            XK_Print,      spawn,      {.v = screenshotcmd } },
+  { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
+	{ 0,                            XF86XK_AudioMute, spawn, {.v = mutevol } },
+	{ 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
 	{ Mod1Mask,                     HOLDKEY,   holdbar,        {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
