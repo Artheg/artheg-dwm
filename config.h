@@ -68,11 +68,13 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *screenshotcmd[] = { "gnome-screenshot", "-i" };
+static const char *screenshotcmd[] = { "xfce4-screenshooter" };
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 /* static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-theme", "slate" }; */
+static const char *dmenu_ytfzf_cmd[] = {"ytfzf", "-Df"};
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh"};
 
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
@@ -81,7 +83,6 @@ static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "togg
 #include "focusurgent.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ 0,                            HOLDKEY,    holdbar,        {0} },
 	{ ALTKEY,                       XK_space,  spawn,          {.v = dmenucmd } },
 	{ ALTKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -91,7 +92,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
+	{ MODKEY,                       XK_z, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -114,6 +115,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = -10 } },
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = +10 } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = dmenu_nm_cmd } },
+	{ MODKEY|ControlMask,                       XK_s,      spawn,          {.v = dmenu_songname_cmd } },
+	{ MODKEY|ControlMask,                       XK_y,      spawn,          {.v = dmenu_ytfzf_cmd } },
+	{ 0,                            HOLDKEY,   holdbar,        { 0 } },
 	{ 0,                            XK_Print,      spawn,      {.v = screenshotcmd } },
   { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
 	{ 0,                            XF86XK_AudioMute, spawn, {.v = mutevol } },
