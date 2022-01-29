@@ -8,6 +8,7 @@ static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Ubuntu:size=10" };
 static const char dmenufont[]       = "Terminus:size=10";
+static const char rofifont[]       = "Terminus 10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -71,7 +72,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *screenshotcmd[] = { "xfce4-screenshooter" };
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
-/* static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-theme", "slate" }; */
+static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue" };
 static const char *dmenu_ytfzf_cmd[] = {"ytfzf", "-Df"};
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh"};
@@ -83,8 +84,8 @@ static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "togg
 #include "focusurgent.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ ALTKEY,                       XK_space,  spawn,          {.v = dmenucmd } },
-	{ ALTKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_space,  spawn,          {.v = roficmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -117,7 +118,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_w,      spawn,          {.v = dmenu_nm_cmd } },
 	{ MODKEY|ControlMask,                       XK_s,      spawn,          {.v = dmenu_songname_cmd } },
 	{ MODKEY|ControlMask,                       XK_y,      spawn,          {.v = dmenu_ytfzf_cmd } },
-	{ 0,                            HOLDKEY,   holdbar,        { 0 } },
 	{ 0,                            XK_Print,      spawn,      {.v = screenshotcmd } },
   { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
 	{ 0,                            XF86XK_AudioMute, spawn, {.v = mutevol } },
@@ -133,6 +133,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_u,      focusurgent,    {0} },
+	{ 0,                            HOLDKEY,   holdbar,        { 0 } }
 };
 
 /* button definitions */
