@@ -33,8 +33,9 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Gimp",       NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",    NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Alacritty",  NULL,       "nmtui",    0,            1,           -1 },
 };
 
 /* layout(s) */
@@ -75,6 +76,7 @@ static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-
 static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue" };
 static const char *dmenu_ytfzf_cmd[] = {"ytfzf", "-Df"};
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *fm_cmd[]  = { "alacritty", "-e", "vifmrun"};
 static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh"};
 
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
@@ -115,9 +117,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = -10 } },
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = +10 } },
-	{ MODKEY,                       XK_w,      spawn,          {.v = dmenu_nm_cmd } },
-	{ MODKEY|ControlMask,                       XK_s,      spawn,          {.v = dmenu_songname_cmd } },
-	{ MODKEY|ControlMask,                       XK_y,      spawn,          {.v = dmenu_ytfzf_cmd } },
+	{ MODKEY|ControlMask,           XK_e,      spawn,          {.v = fm_cmd } },
+	{ MODKEY|ControlMask,           XK_w,      spawn,          {.v = dmenu_nm_cmd } },
+	{ MODKEY|ControlMask,           XK_s,      spawn,          {.v = dmenu_songname_cmd } },
+	{ MODKEY|ControlMask,           XK_y,      spawn,          {.v = dmenu_ytfzf_cmd } },
 	{ 0,                            XK_Print,      spawn,      {.v = screenshotcmd } },
   { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
 	{ 0,                            XF86XK_AudioMute, spawn, {.v = mutevol } },
