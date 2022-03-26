@@ -1,2 +1,5 @@
 .ccls-cache/
-dwm.o
+*.o
+dwm
+*.orig
+*.rej
