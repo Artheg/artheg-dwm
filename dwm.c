@@ -147,6 +147,7 @@ typedef struct {
 
 /* function declarations */
 static void applyrules(Client *c);
+static void shiftview(const Arg *arg);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
 static void arrange(Monitor *m);
 static void arrangemon(Monitor *m);
@@ -299,6 +300,27 @@ struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
 
 /* function implementations */
 
+ /** Function to shift the current view to the left/right
+ *
+ * @param: "arg->i" stores the number of tags to shift right (positive value)
+ *          or left (negative value)
+ * Author: Fernando C.V. <ferkiwi_AT_gmail.com> 
+ */
+
+void 
+shiftview(const Arg *arg) {
+	Arg shifted;
+
+	if(arg->i > 0) // left circular shift
+		shifted.ui = (selmon->tagset[selmon->seltags] << arg->i)
+		   | (selmon->tagset[selmon->seltags] >> (LENGTH(tags) - arg->i));
+
+	else // right circular shift
+		shifted.ui = selmon->tagset[selmon->seltags] >> (- arg->i)
+		   | selmon->tagset[selmon->seltags] << (LENGTH(tags) + arg->i);
+
+	view(&shifted);
+}
 
 void
 holdbar(const Arg *arg)
@@ -2440,4 +2462,5 @@ centeredfloatingmaster(Monitor *m)
 		       m->wh - (2*c->bw), 0);
 		tx += WIDTH(c);
 	}
+
 }
