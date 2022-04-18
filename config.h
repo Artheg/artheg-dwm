@@ -73,15 +73,18 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *screenshotcmd[] = { "xfce4-screenshooter" };
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
-static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue" };
+static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue", "-monitor", "-4" };
 static const char *dmenu_ytfzf_cmd[] = {"ytfzf", "-Df"};
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *fm_cmd[]  = { "alacritty", "-e", "vifmrun"};
+static const char *fm_cmd[]  = { "alacritty", "-e", "lfub"};
 static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh"};
 
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
+static const char *prevtrack[]   = { "playerctl", "previous",    NULL };
+static const char *playpause[] = { "playerctl", "play-pause",    NULL };
+static const char *nexttrack[] = { "playerctl", "next",   "0", "toggle",  NULL };
 
 #include "focusurgent.c"
 static Key keys[] = {
@@ -127,6 +130,9 @@ static Key keys[] = {
   { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
 	{ 0,                            XF86XK_AudioMute, spawn, {.v = mutevol } },
 	{ 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
+  { 0,                            XF86XK_AudioPrev, spawn, {.v = prevtrack } },
+	{ 0,                            XF86XK_AudioPlay, spawn, {.v = playpause } },
+	{ 0,                            XF86XK_AudioNext, spawn, {.v = nexttrack } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
