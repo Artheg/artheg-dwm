@@ -35,7 +35,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",       NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",    NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "Alacritty",  NULL,       "nmtui",    0,            1,           -1 },
+	{ "st",  NULL,       "nmtui",    0,            1,           -1 },
 };
 
 /* layout(s) */
@@ -74,14 +74,14 @@ static const char *screenshotcmd[] = { "xfce4-screenshooter" };
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue", "-monitor", "-4" };
-static const char *dmenu_ytfzf_cmd[] = {"ytfzf", "-Df"};
-static const char *termcmd[]  = { "alacritty", NULL };
-static const char *fm_cmd[]  = { "alacritty", "-e", "lfub"};
+static const char *dmenu_ytfzf_cmd[] = {"st", "-e", "sh", "-c", "'ytfzf", "-tf'"};
+static const char *termcmd[]  = { "st", "-e", "scroll" };
+static const char *fm_cmd[]  = { "st", "-e", "lfub"};
 static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh"};
 
-static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
-static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
-static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
+static const char *upvol[]   = { "/usr/bin/amixer", "set",  "Master", "5%+", "&&", "playpop", NULL };
+static const char *downvol[]   = { "/usr/bin/amixer", "set",  "Master", "5%-", "&&", "playpop", NULL };
+static const char *mutevol[]   = { "/usr/bin/amixer", "set",  "Master", "toggle", NULL };
 static const char *prevtrack[]   = { "playerctl", "previous",    NULL };
 static const char *playpause[] = { "playerctl", "play-pause",    NULL };
 static const char *nexttrack[] = { "playerctl", "next",   "0", "toggle",  NULL };
@@ -110,6 +110,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY|ShiftMask,             XK_f,      fullscreen,     {0} },
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_p,      setlayout,      {0} },
