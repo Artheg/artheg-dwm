@@ -6,9 +6,9 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Ubuntu:size=10" };
-static const char dmenufont[]       = "Terminus:size=10";
-static const char rofifont[]       = "Terminus 10";
+static const char *fonts[]          = { "CozetteVector:size=10" };
+static const char dmenufont[]       = "CozetteVector:size=10";
+static const char rofifont[]       = "CozetteVector 10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -20,7 +20,7 @@ static const char col_gordon[]      = "#b35820";
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1,  col_gray2  },
+	[SchemeNorm] = { col_gray3, col_gray1,  col_gordon  },
 	[SchemeSel]  = { col_gray4, col_dirty_blue, col_white  },
 };
 
@@ -70,18 +70,21 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *screenshotcmd[] = { "xfce4-screenshooter" };
+static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
 static const char *dmenu_nm_cmd[] = { "networkmanager_dmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_dirty_blue, "-sf", col_gray4, NULL };
-static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue", "-monitor", "-4" };
-static const char *dmenu_ytfzf_cmd[] = {"st", "-e", "sh", "-c", "'ytfzf", "-tf'"};
-static const char *termcmd[]  = { "st", "-e", "scroll" };
-static const char *fm_cmd[]  = { "st", "-e", "lfub"};
-static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh"};
+static const char *roficmd[] = { "rofi", "-show", "drun", "-show-icons", "-font", rofifont, "-theme", "DarkBlue", "-monitor", "-4", NULL };
+static const char *dmenu_ytfzf_cmd[] = { "ytfzf", "-Df", NULL };
+static const char *termcmd[]  = { "st", NULL };
+static const char *fm_cmd[]  = { "st", "-e", "lfub", NULL};
+static const char *select_screen_layout_cmd[]  = { "select_screen_layout", NULL };
+static const char *dmenu_pulse_cmd[]  = { "dmenu_pulse", NULL };
+static const char *dmenu_songname_cmd[] = {"/home/artheg/songname.sh", NULL };
+static const char *lock_cmd[] = { "xlock", NULL };
 
-static const char *upvol[]   = { "/usr/bin/amixer", "set",  "Master", "5%+", "&&", "playpop", NULL };
-static const char *downvol[]   = { "/usr/bin/amixer", "set",  "Master", "5%-", "&&", "playpop", NULL };
-static const char *mutevol[]   = { "/usr/bin/amixer", "set",  "Master", "toggle", NULL };
+static const char *upvol[]   = { "vol",  "up", NULL};
+static const char *downvol[]   = { "vol", "down", NULL};
+static const char *mutevol[]   = { "vol",  "mute", NULL};
 static const char *prevtrack[]   = { "playerctl", "previous",    NULL };
 static const char *playpause[] = { "playerctl", "play-pause",    NULL };
 static const char *nexttrack[] = { "playerctl", "next",   "0", "toggle",  NULL };
@@ -89,6 +92,7 @@ static const char *nexttrack[] = { "playerctl", "next",   "0", "toggle",  NULL }
 #include "focusurgent.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+  { MODKEY|ControlMask,           XK_c,      spawn,          {.v = lock_cmd} },
 	{ MODKEY,                       XK_space,  spawn,          {.v = roficmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -125,6 +129,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = +10 } },
 	{ MODKEY|ControlMask,           XK_e,      spawn,          {.v = fm_cmd } },
 	{ MODKEY|ControlMask,           XK_w,      spawn,          {.v = dmenu_nm_cmd } },
+  { MODKEY|ControlMask,           XK_v,      spawn,          {.v = select_screen_layout_cmd } },
+  { MODKEY|ControlMask,           XK_b,      spawn,          {.v = dmenu_pulse_cmd } },
 	{ MODKEY|ControlMask,           XK_s,      spawn,          {.v = dmenu_songname_cmd } },
 	{ MODKEY|ControlMask,           XK_y,      spawn,          {.v = dmenu_ytfzf_cmd } },
 	{ 0,                            XK_Print,      spawn,      {.v = screenshotcmd } },
